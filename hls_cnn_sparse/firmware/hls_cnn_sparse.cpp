@@ -106,6 +106,7 @@ void sparse_input_reduce(data_T input_arr[N_h * N_w * N_c],
             #pragma HLS UNROLL
             sparse_arr_feat[N_c * i + j] = input_arr[N_c * pair.index + j];
         }
+        // ^ probably set >threshold check here than modifying Op_active, since usually N_c=1 is cheap?
 
         // Fill height and width indices.
         sparse_arr_hash[2 * i] = j_h_arr[pair.index]; 
@@ -200,7 +201,7 @@ void sparse_conv(data_T sparse_arr_feat_in[N_sparse * n_chan],
             }
 
             // Add bias.
-            acc += b[i_filt];
+            if (acc != 0) { acc += b[i_filt]; }
             sparse_arr_feat_out[n_filt * i_pixel_out + i_filt] = acc;
         }
     }
