@@ -4,9 +4,23 @@
 #include "parameters.h"
 
 
-template <class T, class t> class Op_active {
+//template <class T, class t> class Op_active {
+//    public:
+//      T operator()(T a, T b, t threshold) { return (a.value > threshold) ? a : b; }
+//};
+
+template <class T, class t> class Op_active { // test with old Op_active and setting the check in main fill loop
     public:
-      T operator()(T a, T b, t threshold) { return (a.value > threshold) ? a : b; }
+      T operator()(T a, T b, t threshold) {
+        if (a.value > threshold) return a;
+        else if (b.value > threshold) return b;
+        else {
+            T none;
+            none.value = 0;
+            none.index = 0;
+            return none;
+        }
+      }
 };
   
 constexpr int _floorlog2(int x) { return (x < 2) ? 0 : 1 + _floorlog2(x / 2); }
